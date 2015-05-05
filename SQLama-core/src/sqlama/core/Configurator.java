@@ -10,6 +10,7 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.StatusPrinter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -48,7 +49,7 @@ public class Configurator {
         
         //OutputStream out = new 
         LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();
-        
+                
         PatternLayoutEncoder encoder = new PatternLayoutEncoder();
         encoder.setContext(context);
         encoder.setPattern("%d %d %d %class %line %level %logger - %msg%n%ex");
@@ -79,6 +80,10 @@ public class Configurator {
         fileApp.setAppend(true);
         
         fileApp.start();
+        
+        
+        context.getLogger(Logger.ROOT_LOGGER_NAME).addAppender(innerApp);
+        context.getLogger(Logger.ROOT_LOGGER_NAME).addAppender(fileApp);
         
         StatusPrinter.printInCaseOfErrorsOrWarnings(context);
     }

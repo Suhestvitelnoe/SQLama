@@ -65,6 +65,6 @@
     </AnchorPane>
   </children>
   <stylesheets>
-    <URL value="@BasicApplication.css" />
+    <URL value="@../styles/MainWnd.css" />
   </stylesheets>
 </VBox>

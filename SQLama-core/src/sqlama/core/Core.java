@@ -13,7 +13,7 @@ public class Core implements CoreGUI{
     
     private Core() {
         Configurator.init();
-        LoggerFactory.getLogger(this.getClass()).info("oooooioooo");
+        LoggerFactory.getLogger(this.getClass()).info("125");
     }
     
     public static CoreGUI getInstance() {

@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-//import sqlama.core.Core;
+import sqlama.core.Core;
 import sqlama.core.CoreGUI;
 
 public class MainApp extends Application {
@@ -17,12 +17,12 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         //load core
-        //core = Core.getInstance();
+        core = Core.getInstance();
         
         //start window
         Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/MainWnd.fxml"), new ResourceHandler("MainWnd", "en"));
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("/styles/MainWnd.css");
+        scene.getStylesheets().add("resources/styles/MainWnd.css");
         stage.setTitle("SQLama " + VERSION);
         stage.setScene(scene);
         stage.show();

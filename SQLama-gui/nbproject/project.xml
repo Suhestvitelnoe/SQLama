@@ -31,7 +31,7 @@
                 <id>jar</id>
             </reference>
             <reference>
-                <foreign-project>squetzal-core</foreign-project>
+                <foreign-project>SQLama-core</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
