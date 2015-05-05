@@ -13,7 +13,7 @@ public class ResourceHandler extends ResourceBundle {
     private final ResourceBundle resourceBundle;
 
     public ResourceHandler(String window, String locale) {
-        resourceBundle = ResourceBundle.getBundle("i18n." + window + "_" + locale);
+        resourceBundle = ResourceBundle.getBundle("resources/i18n." + window + "_" + locale);
     }
 
     @Override
