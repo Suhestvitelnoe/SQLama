@@ -5,6 +5,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.OutputStreamAppender;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
@@ -60,41 +61,60 @@ public class SettingsManager {
         
         //OutputStream out = new 
                 
-        PatternLayoutEncoder encoder = new PatternLayoutEncoder();
-        encoder.setContext(context);
-        encoder.setPattern("%d [%t] %class:%method on %line %level - %msg%n%xEx{full}");
-        encoder.start();
+        PatternLayoutEncoder encoderInner = new PatternLayoutEncoder();
+        encoderInner.setContext(context);
+        encoderInner.setImmediateFlush(true);
+        encoderInner.setPattern("%d [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderInner.start();
 
         // OutputStreamAppender
-        OutputStreamAppender<ILoggingEvent> innerApp= new OutputStreamAppender<>();
-        innerApp.setName("Inner Appender");
-        innerApp.setContext(context);
-        innerApp.setEncoder(encoder);
-        innerApp.setOutputStream(stream);
+        OutputStreamAppender<ILoggingEvent> appenderInner= new OutputStreamAppender<>();
+        appenderInner.setName("Inner Appender");
+        appenderInner.setContext(context);
+        appenderInner.setEncoder(encoderInner);
+        appenderInner.setOutputStream(stream);
 
-        innerApp.start();
+        appenderInner.start();
         
         
-        RollingFileAppender fileApp = new RollingFileAppender();
+        PatternLayoutEncoder encoderFile = new PatternLayoutEncoder();
+        encoderFile.setContext(context);
+        encoderFile.setImmediateFlush(true);
+        encoderFile.setPattern("%d [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderFile.start();
+
+        RollingFileAppender appenderFile = new RollingFileAppender();
         
         TimeBasedRollingPolicy policy = new TimeBasedRollingPolicy();
         policy.setMaxHistory(14);
-        policy.setParent(fileApp);
+        policy.setParent(appenderFile);
         policy.setContext(context);
         policy.setFileNamePattern(PATH + "log/%d{yyyy-MM-dd}.log");
         policy.start();
         
-        fileApp.setName("File Appender");
-        fileApp.setFile(PATH + "log/actual.log");
-        fileApp.setRollingPolicy(policy);
-        fileApp.setContext(context);
-        fileApp.setEncoder(encoder);
-        fileApp.setAppend(true);
+        appenderFile.setName("File Appender");
+        appenderFile.setFile(PATH + "log/actual.log");
+        appenderFile.setRollingPolicy(policy);
+        appenderFile.setContext(context);
+        appenderFile.setEncoder(encoderFile);
+        appenderFile.setAppend(true);
         
-        fileApp.start();
+        appenderFile.start();
         
-        logger.addAppender(innerApp);
-        logger.addAppender(fileApp);
+        PatternLayoutEncoder encoderConsole = new PatternLayoutEncoder();
+        encoderConsole.setContext(context);
+        encoderConsole.setImmediateFlush(true);
+        encoderConsole.setPattern("%d [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderConsole.start();
+
+        ConsoleAppender appenderConsole = new ConsoleAppender();
+        appenderConsole.setEncoder(encoderConsole);
+        appenderConsole.setContext(context);
+        appenderConsole.start();
+        
+        logger.addAppender(appenderInner);
+        logger.addAppender(appenderFile);
+        logger.addAppender(appenderConsole);
         
         //context.start();
         
@@ -106,11 +126,14 @@ public class SettingsManager {
             "java.vm.name",
             "java.vm.vendor",
             "java.vm.version",
+            "java.vm.name",
             "java.runtime.version",
             "java.class.version",
             "javafx.runtime.version",
             "os.name",
             "os.version",
+            "sun.os.patch.level",
+            "sun.jnu.encoding",
             "file.encoding",
             "user.language",
         };
