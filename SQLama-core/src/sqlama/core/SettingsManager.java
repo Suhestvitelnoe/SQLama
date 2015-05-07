@@ -24,8 +24,7 @@ public class SettingsManager {
     private static String CONFIG_FILE = "config.json";
     
     public static String PATH = null;
-    
-    public static Logger logger;
+    private static Logger logger;
     
     public static Logger getLogger() {
         return logger;
