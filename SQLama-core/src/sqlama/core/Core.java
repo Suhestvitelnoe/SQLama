@@ -1,7 +1,7 @@
 
 package sqlama.core;
 
-import org.slf4j.LoggerFactory;
+import sqlama.core.settings.SettingsManager;
 
 /**
  *
@@ -10,9 +10,10 @@ import org.slf4j.LoggerFactory;
 public class Core implements CoreGUI{
     
     private static Core instance = null;
+    private SettingsManager settMan = null;
     
     private Core() {
-        SettingsManager.init();
+        settMan = SettingsManager.getInstance();
     }
     
     public static CoreGUI getInstance() {

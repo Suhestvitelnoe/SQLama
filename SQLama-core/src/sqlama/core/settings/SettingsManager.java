@@ -1,5 +1,5 @@
 
-package sqlama.core;
+package sqlama.core.settings;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -21,16 +21,28 @@ import org.slf4j.LoggerFactory;
  */
 public class SettingsManager {
     
-    private static String CONFIG_FILE = "config.json";
+    private static final String CONFIG_FILE = "config.json";
     
     public static String PATH = null;
-    private static Logger logger;
+    private Logger logger;
+    private static SettingsManager instance;
     
-    public static Logger getLogger() {
-        return logger;
+    public static SettingsManager getInstance() {
+        if (instance == null) {
+            instance = new SettingsManager();
+        }
+        return instance;
+    }
+
+    private SettingsManager() {
+        boolean found = init();
+        createLogger();
+        if (!found) {
+            logger.info("Configuration file not found. Created and saved by default");
+        }
     }
     
-    public static void init() {
+    public final boolean init() {
         File cfg = new File(CONFIG_FILE);
         if (cfg.exists()) {
             PATH = File.separator;
@@ -40,15 +52,18 @@ public class SettingsManager {
             
             if (!cfg.exists()) {
                 //create default configuration here
+                return false;
             }
         }
-        createLogger();
+        return true;
     }
     
-    private static void createLogger() {
+    private void createLogger() {
         if (logger != null) {
             return;
         }
+        String logPattern = "%date{HH:mm:ss.SSS} [%t] %class:%method on %line %level - %msg%n%xEx{full}";
+        
         LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();
         logger = context.getLogger("ROOT");
         context.reset();
@@ -56,14 +71,12 @@ public class SettingsManager {
         File pathTest = new File(PATH + "log");
         pathTest.mkdirs();
         
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        //ByteArrayOutputStream stream = new ByteArrayOutputStream();
         
-        //OutputStream out = new 
-                
-        PatternLayoutEncoder encoderInner = new PatternLayoutEncoder();
+        /*PatternLayoutEncoder encoderInner = new PatternLayoutEncoder();
         encoderInner.setContext(context);
         encoderInner.setImmediateFlush(true);
-        encoderInner.setPattern("%date{HH:mm:ss.SSS} [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderInner.setPattern(logPattern);
         encoderInner.start();
 
         // OutputStreamAppender
@@ -73,13 +86,13 @@ public class SettingsManager {
         appenderInner.setEncoder(encoderInner);
         appenderInner.setOutputStream(stream);
 
-        appenderInner.start();
+        appenderInner.start();*/
         
         
         PatternLayoutEncoder encoderFile = new PatternLayoutEncoder();
         encoderFile.setContext(context);
         encoderFile.setImmediateFlush(true);
-        encoderFile.setPattern("%date{HH:mm:ss.SSS} [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderFile.setPattern(logPattern);
         encoderFile.start();
 
         RollingFileAppender appenderFile = new RollingFileAppender();
@@ -102,7 +115,7 @@ public class SettingsManager {
         PatternLayoutEncoder encoderConsole = new PatternLayoutEncoder();
         encoderConsole.setContext(context);
         encoderConsole.setImmediateFlush(true);
-        encoderConsole.setPattern("%date{HH:mm:ss.SSS} [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderConsole.setPattern(logPattern);
         encoderConsole.start();
 
         ConsoleAppender appenderConsole = new ConsoleAppender();
@@ -110,7 +123,7 @@ public class SettingsManager {
         appenderConsole.setContext(context);
         appenderConsole.start();
         
-        logger.addAppender(appenderInner);
+        //logger.addAppender(appenderInner);
         logger.addAppender(appenderFile);
         logger.addAppender(appenderConsole);
         
@@ -138,5 +151,9 @@ public class SettingsManager {
         }
         
         StatusPrinter.printInCaseOfErrorsOrWarnings(context);
+    }
+    
+    public Logger getLogger() {
+        return logger;
     }
 }
