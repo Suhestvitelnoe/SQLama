@@ -64,7 +64,7 @@ public class SettingsManager {
         PatternLayoutEncoder encoderInner = new PatternLayoutEncoder();
         encoderInner.setContext(context);
         encoderInner.setImmediateFlush(true);
-        encoderInner.setPattern("%d [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderInner.setPattern("%date{HH:mm:ss.SSS} [%t] %class:%method on %line %level - %msg%n%xEx{full}");
         encoderInner.start();
 
         // OutputStreamAppender
@@ -80,7 +80,7 @@ public class SettingsManager {
         PatternLayoutEncoder encoderFile = new PatternLayoutEncoder();
         encoderFile.setContext(context);
         encoderFile.setImmediateFlush(true);
-        encoderFile.setPattern("%d [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderFile.setPattern("%date{HH:mm:ss.SSS} [%t] %class:%method on %line %level - %msg%n%xEx{full}");
         encoderFile.start();
 
         RollingFileAppender appenderFile = new RollingFileAppender();
@@ -89,11 +89,10 @@ public class SettingsManager {
         policy.setMaxHistory(14);
         policy.setParent(appenderFile);
         policy.setContext(context);
-        policy.setFileNamePattern(PATH + "log/%d{yyyy-MM-dd}.log");
+        policy.setFileNamePattern(PATH + "log/%d.log");
         policy.start();
         
         appenderFile.setName("File Appender");
-        appenderFile.setFile(PATH + "log/actual.log");
         appenderFile.setRollingPolicy(policy);
         appenderFile.setContext(context);
         appenderFile.setEncoder(encoderFile);
@@ -104,7 +103,7 @@ public class SettingsManager {
         PatternLayoutEncoder encoderConsole = new PatternLayoutEncoder();
         encoderConsole.setContext(context);
         encoderConsole.setImmediateFlush(true);
-        encoderConsole.setPattern("%d [%t] %class:%method on %line %level - %msg%n%xEx{full}");
+        encoderConsole.setPattern("%date{HH:mm:ss.SSS} [%t] %class:%method on %line %level - %msg%n%xEx{full}");
         encoderConsole.start();
 
         ConsoleAppender appenderConsole = new ConsoleAppender();
@@ -115,8 +114,6 @@ public class SettingsManager {
         logger.addAppender(appenderInner);
         logger.addAppender(appenderFile);
         logger.addAppender(appenderConsole);
-        
-        //context.start();
         
         logger.info("Application SQLama starting");
         logger.info("System variables:");

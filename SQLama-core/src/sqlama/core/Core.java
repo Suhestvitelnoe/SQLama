@@ -13,7 +13,6 @@ public class Core implements CoreGUI{
     
     private Core() {
         SettingsManager.init();
-        SettingsManager.getLogger().info("cau");
     }
     
     public static CoreGUI getInstance() {
