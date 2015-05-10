@@ -6,18 +6,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sqlama.core.Core;
-import sqlama.core.CoreGUI;
+import sqlama.core.CoreImpl;
+import sqlama.interfaces.Core;
 
 public class MainApp extends Application {
 
     public static final String VERSION = "0.0";
-    private CoreGUI core;
+    private Core core;
     
     @Override
     public void start(Stage stage) throws Exception {
         //load core
-        core = Core.getInstance();
+        core = CoreImpl.getInstance();
         
         //start window
         Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/MainWnd.fxml"), new ResourceHandler("MainWnd", "en"));

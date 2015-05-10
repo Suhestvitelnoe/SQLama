@@ -4,13 +4,10 @@ package sqlama.core.settings;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
-import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
-import ch.qos.logback.core.OutputStreamAppender;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.StatusPrinter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Properties;
 import org.slf4j.LoggerFactory;
@@ -52,6 +49,8 @@ public class SettingsManager {
             
             if (!cfg.exists()) {
                 //create default configuration here
+                //todo get plugin list
+                // load settings of each plugin
                 return false;
             }
         }

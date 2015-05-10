@@ -32,7 +32,7 @@ public class ResourceHandler extends ResourceBundle {
 
     @Override
     public boolean containsKey(String key) {
-        return true;//resourceBundle.containsKey(key);
+        return true;
     }
 
 }
