@@ -3,7 +3,7 @@ package sqlama.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import sqlama.core.config.PluginerConfig;
+import sqlama.core.config.PluginConfig;
 import sqlama.plugin.type.PluginType;
 import sqlama.interfaces.SettingsManagerPublic;
 
@@ -13,7 +13,7 @@ import sqlama.interfaces.SettingsManagerPublic;
  */
 public class Pluginer {
     
-    private ArrayList<PluginerConfig> plugins;
+    private ArrayList<PluginConfig> plugins;
     private SettingsManagerPublic settMan = null;
     HashMap<PluginType, Object> map = null;
 
@@ -27,7 +27,7 @@ public class Pluginer {
         map = new HashMap<>();
         plugins = settMan.getPlugins();
         
-        for(PluginerConfig conf: plugins) {
+        for(PluginConfig conf: plugins) {
             if (conf.getEnabled()) {
                 continue;
             }

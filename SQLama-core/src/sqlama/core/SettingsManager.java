@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Properties;
 import org.slf4j.LoggerFactory;
-import sqlama.core.config.PluginerConfig;
+import sqlama.core.config.PluginConfig;
 import sqlama.interfaces.SettingsManagerPublic;
 
 /**
@@ -27,7 +27,7 @@ public class SettingsManager implements SettingsManagerPublic {
     private static SettingsManager instance;
     
     private Logger logger;
-    private ArrayList<PluginerConfig> plugins;
+    private ArrayList<PluginConfig> plugins;
     
     public static SettingsManager getInstance() {
         if (instance == null) {
@@ -58,7 +58,7 @@ public class SettingsManager implements SettingsManagerPublic {
                 //todo get plugin list
                 // load settings of each plugin
                 
-                plugins.add(new PluginerConfig("sqlama.core.plugin.CoreEditor", null, true));
+                plugins.add(new PluginConfig("sqlama.core.plugin.CoreEditor", null, true));
                 
                 return false;
             }
@@ -166,7 +166,7 @@ public class SettingsManager implements SettingsManagerPublic {
     }
     
     @Override
-    public ArrayList<PluginerConfig> getPlugins() {
+    public ArrayList<PluginConfig> getPlugins() {
         return plugins;
     }
 }
