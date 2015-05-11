@@ -1,5 +1,5 @@
 
-package sqlama.core.settings;
+package sqlama.settings;
 
 /**
  *

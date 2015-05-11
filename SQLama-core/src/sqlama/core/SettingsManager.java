@@ -1,5 +1,5 @@
 
-package sqlama.core.settings;
+package sqlama.core;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -9,20 +9,25 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.StatusPrinter;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Properties;
 import org.slf4j.LoggerFactory;
+import sqlama.core.config.PluginerConfig;
+import sqlama.interfaces.SettingsManagerPublic;
 
 /**
  *
  * @author MarDuke
  */
-public class SettingsManager {
+public class SettingsManager implements SettingsManagerPublic {
     
     private static final String CONFIG_FILE = "config.json";
     
     public static String PATH = null;
-    private Logger logger;
     private static SettingsManager instance;
+    
+    private Logger logger;
+    private ArrayList<PluginerConfig> plugins;
     
     public static SettingsManager getInstance() {
         if (instance == null) {
@@ -41,6 +46,7 @@ public class SettingsManager {
     
     public final boolean init() {
         File cfg = new File(CONFIG_FILE);
+        plugins = new ArrayList<>();
         if (cfg.exists()) {
             PATH = File.separator;
         } else {
@@ -51,6 +57,9 @@ public class SettingsManager {
                 //create default configuration here
                 //todo get plugin list
                 // load settings of each plugin
+                
+                plugins.add(new PluginerConfig("sqlama.core.plugin.CoreEditor", null, true));
+                
                 return false;
             }
         }
@@ -154,5 +163,10 @@ public class SettingsManager {
     
     public Logger getLogger() {
         return logger;
+    }
+    
+    @Override
+    public ArrayList<PluginerConfig> getPlugins() {
+        return plugins;
     }
 }

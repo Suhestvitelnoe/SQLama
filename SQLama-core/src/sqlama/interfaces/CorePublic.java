@@ -1,12 +1,12 @@
 
 package sqlama.interfaces;
 
-import sqlama.core.settings.SettingMap;
+import sqlama.settings.SettingMap;
 
 /**
  *
  * @author marduke
  */
-public interface Core {
+public interface CorePublic {
     public SettingMap getSettings();
 }

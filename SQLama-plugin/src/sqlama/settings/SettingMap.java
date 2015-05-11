@@ -1,5 +1,5 @@
 
-package sqlama.core.settings;
+package sqlama.settings;
 
 import java.util.Set;
 import java.util.SortedMap;
