@@ -4,7 +4,9 @@ package sqlama.core.config;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import sqlama.exception.SettingsException;
 import sqlama.exception.SqlamaException;
+import sqlama.log.Log;
 import sqlama.plugin.api.Settings;
 import sqlama.plugin.type.PluginBase;
 
@@ -19,6 +21,7 @@ public class PluginConfig {
     private boolean enabled;
     private ClassLoader classloader;
     private ArrayList<PluginBase> instances;
+    private Settings settings;
 
     public PluginConfig(String classPath, String file, boolean enabled) {
         this.classPath = classPath;
@@ -46,7 +49,7 @@ public class PluginConfig {
     public ClassLoader getClassloader() throws SqlamaException {
         if (classloader == null) {
             if (file == null && classPath.startsWith("sqlama.core.plugin.")) {
-                classloader = this.getClassloader();
+                classloader = this.getClass().getClassLoader();
             } else {
                 try {
                     classloader = new URLClassLoader(new URL[] {new URL("jar:file:" + file + "!/")});
@@ -66,7 +69,9 @@ public class PluginConfig {
         try {
             Object obj = classloader.loadClass(classPath).newInstance();
             if (obj instanceof PluginBase) {
-                return (PluginBase) obj;
+                PluginBase plg = (PluginBase) obj;
+                instances.add(plg);
+                return plg;
             } else {
                 throw new SqlamaException("Bad class path");
             }
@@ -75,22 +80,37 @@ public class PluginConfig {
         }
     }
     
-    public boolean validate(Settings sett) throws SqlamaException {
+    public void setSettings(Settings sett) {
+        settings = sett;
+    }
+    
+    public void validate() throws SqlamaException, SettingsException {
         if (classloader == null) {
             getClassloader();
         }
         
         try {
+            Settings sett = settings;
             Class<?> cls = classloader.loadClass(classPath);
-            if (!cls.isAssignableFrom(PluginBase.class)) {
+            Object inst = cls.newInstance();
+            if (!(inst instanceof PluginBase)) {
                 throw new SqlamaException("Bad class path");
             }
             
-            Object inst = cls.newInstance();
             PluginBase pl = (PluginBase) inst;
-            pl.
-            
-            
+            if (!pl.validateSettings(sett)) {
+                Log.get().warn("Validation problem, try to repair...");
+                Settings newSett = pl.repairSettings(sett);
+                if (newSett == null) {
+                    Log.get().warn("Repair failed, default settings loaded");
+                    settings = pl.getDefaultSettings();
+                } else {
+                    Log.get().info("Repair seccessfull");
+                    settings = newSett;
+                }
+            } else {
+                Log.get().info("Validation successfull");
+            }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             throw new SqlamaException(ex);
         }

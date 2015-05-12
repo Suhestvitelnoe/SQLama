@@ -20,7 +20,12 @@ public class MainApp extends Application {
         core = Core.getInstance();
         
         //start window
-        Parent root = FXMLLoader.load(getClass().getResource("/resources/fxml/MainWnd.fxml"), new ResourceHandler("MainWnd", "en"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/fxml/MainWnd.fxml"));
+        loader.setResources(new ResourceHandler("MainWnd", "en"));
+        Parent root = (Parent) loader.load();
+        FXMLController controller = loader.getController();
+        controller.setCore(core);
+        
         Scene scene = new Scene(root);
         scene.getStylesheets().add("resources/styles/MainWnd.css");
         stage.setTitle("SQLama " + VERSION);

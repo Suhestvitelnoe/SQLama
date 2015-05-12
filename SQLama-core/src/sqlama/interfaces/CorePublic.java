@@ -9,4 +9,5 @@ import sqlama.settings.SettingMap;
  */
 public interface CorePublic {
     public SettingMap getSettings();
+    public void exitApp(boolean save);
 }

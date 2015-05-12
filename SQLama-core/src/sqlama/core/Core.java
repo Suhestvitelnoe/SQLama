@@ -2,6 +2,7 @@
 package sqlama.core;
 
 import sqlama.interfaces.CorePublic;
+import sqlama.log.Log;
 import sqlama.settings.SettingMap;
 
 /**
@@ -16,9 +17,13 @@ public class Core implements CorePublic{
     
     private Core() {
         settMan = SettingsManager.getInstance();
-        settMan.getLogger().info("SQLama started");
         pluginer = new Pluginer(settMan);
-        pluginer.validate();
+        if (!pluginer.validate()) {
+            Log.get().error("Validation failed, program exiting...");
+            exitApp(false);
+        } else {
+            Log.get().info("SQLama started");
+        }
     }
     
     public static CorePublic getInstance() {
@@ -31,5 +36,13 @@ public class Core implements CorePublic{
     @Override
     public SettingMap getSettings() {
         return null;
+    }
+    
+    @Override
+    public final void exitApp(boolean save) {
+        if (save) {
+            //todo 
+        }
+        System.exit(0);
     }
 }

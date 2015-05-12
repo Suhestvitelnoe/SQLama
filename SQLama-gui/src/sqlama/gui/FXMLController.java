@@ -6,8 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import sqlama.interfaces.CorePublic;
 
 public class FXMLController implements Initializable {
+    
+    private CorePublic core = null;
     
     @FXML
     private Button conns;
@@ -18,7 +21,11 @@ public class FXMLController implements Initializable {
     
     @FXML
     private void exitApp(ActionEvent event) {
-        System.exit(0);
+        core.exitApp(true);
+    }
+    
+    public void setCore(CorePublic core) {
+        this.core = core;
     }
     
     @Override
